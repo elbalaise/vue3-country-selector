@@ -1,6 +1,13 @@
 {
   "name": "vue3-country-selector",
   "version": "0.0.1",
+  "author": {
+    "email": "kamgangf11@gmail.com",
+    "name": "Le Balaise"
+  },
+  "repository": {
+    "url": "https://github.com/elbalaise/vue3-country-selector.git"
+  },
   "description": "This module contains a simple select-list of countries (in 2 character ISO codes) and their flags.",
   "main": "dist/vue3-country-selector.ssr.js",
   "browser": "dist/vue3-country-selector.esm.js",
