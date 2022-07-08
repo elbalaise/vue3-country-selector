@@ -1,4 +1,3 @@
-import '../node_modules/flag-icons/css/flag-icons.css';
 // Import vue components
 import * as components from '@/components/index';
 

@@ -10,6 +10,7 @@ import babel from '@rollup/plugin-babel';
 import PostCSS from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
+import css from "rollup-plugin-css-only";
 
 // Get browserslist config and remove ie from es build targets
 const esbrowserslist = fs.readFileSync('./.browserslistrc')
@@ -105,12 +106,13 @@ if (!argv.format || argv.format === 'es') {
           [
             '@babel/preset-env',
             {
-              ...babelPresetEnvConfig,
-              targets: esbrowserslist,
+              useBuiltIns: 'usage',
+              corejs: 3
             },
           ],
         ],
       }),
+      // terser(),
     ],
   };
   buildFormats.push(esConfig);
@@ -134,38 +136,39 @@ if (!argv.format || argv.format === 'cjs') {
       vue(baseConfig.plugins.vue),
       ...baseConfig.plugins.postVue,
       babel(baseConfig.plugins.babel),
+      // terser()
     ],
   };
   buildFormats.push(umdConfig);
 }
 
-if (!argv.format || argv.format === 'iife') {
-  const unpkgConfig = {
-    ...baseConfig,
-    external,
-    output: {
-      compact: true,
-      file: 'dist/vue3-country-selector.min.js',
-      format: 'iife',
-      name: 'Vue3CountrySelector',
-      exports: 'auto',
-      globals,
-    },
-    plugins: [
-      replace(baseConfig.plugins.replace),
-      ...baseConfig.plugins.preVue,
-      vue(baseConfig.plugins.vue),
-      ...baseConfig.plugins.postVue,
-      babel(baseConfig.plugins.babel),
-      terser({
-        output: {
-          ecma: 5,
-        },
-      }),
-    ],
-  };
-  buildFormats.push(unpkgConfig);
-}
+// if (!argv.format || argv.format === 'iife') {
+//   const unpkgConfig = {
+//     ...baseConfig,
+//     external,
+//     output: {
+//       compact: true,
+//       file: 'dist/vue3-country-selector.min.js',
+//       format: 'iife',
+//       name: 'Vue3CountrySelector',
+//       exports: 'auto',
+//       globals,
+//     },
+//     plugins: [
+//       replace(baseConfig.plugins.replace),
+//       ...baseConfig.plugins.preVue,
+//       vue(baseConfig.plugins.vue),
+//       ...baseConfig.plugins.postVue,
+//       babel(baseConfig.plugins.babel),
+//       terser({
+//         output: {
+//           ecma: 5,
+//         },
+//       }),
+//     ],
+//   };
+//   buildFormats.push(unpkgConfig);
+// }
 
 // Export config
 export default buildFormats;

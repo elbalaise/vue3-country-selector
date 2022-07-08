@@ -67,11 +67,31 @@ export default {
       return this.countries;
     },
   },
+  watch: {
+    codes: {
+      immediate: false,
+      handler: function (val) {
+        this.$nextTick(() => {
+          this.initCountries();
+          this.initSelectedItem();
+        });
+      }
+    },
+    country: {
+      immediate: false,
+      handler: function (val) {
+        this.$nextTick(() => {
+          this.initSelectedItem();
+        })
+      }
+    }
+  },
   methods: {
     openList() {
       this.isOpen = !this.isOpen;
       this.$nextTick(() => {
-        this.$refs.hidden?.focus();
+        if (this.$refs.hidden)
+          this.$refs.hidden.focus();
       });
     },
     selectCountry(country) {
@@ -95,13 +115,23 @@ export default {
       this.countries = c.map(x => ({ ...x, selected: false }));
     },
     initSelectedItem() {
-      let targetCountry = this.countries.find(x => x.code == this.country);
+      let targetCountry = undefined;
 
-      if (!targetCountry && this.isUsingDefaultCountryList) {
+      if (this.selectedCountry) {
+        targetCountry = this.countries.find(x => x.code == this.selectedCountry.code) ?? undefined;
+      }
+
+      if (!(targetCountry?.code)) {
+        targetCountry = this.countries.find(x => x.code == this.country);
+      }
+
+      if (!(targetCountry?.code) && this.isUsingDefaultCountryList) {
         targetCountry = this.countries.find(x => x.code == CAMEROON);
       }
 
-      this.selectCountry(targetCountry);
+      if ((targetCountry?.code)) {
+        this.selectCountry(targetCountry);
+      }
     }
   }
 }

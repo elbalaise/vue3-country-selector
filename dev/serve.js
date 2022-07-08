@@ -1,3 +1,4 @@
+import '../node_modules/flag-icons/css/flag-icons.css';
 
 import { createApp } from 'vue';
 import Dev from './serve.vue';
